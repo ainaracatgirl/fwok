@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fwok demo - todos</title>
+    <meta name="description" content="fwok demo - todos">
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+
+            background: #333;
+            color: #fff;
+            font-family: sans-serif;
+        }
+
+        form {
+            margin: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <ul fwok:ref="todos"></ul>
+
+    <form fwok:onsubmit|preventDefault="addTodo(todoText)">
+        <input
+            fwok:bind="todoText"
+            name="todo" type="text"
+            placeholder="What needs to be done?"
+        />
+        <input type="submit" value="Add TODO">
+    </form>
+    
+    <script src="fwok.js"></script>
+    <script>
+        // Define the todoData state
+        const todoData = fwok.state([]);
+
+        // Updates the state of todoData and updates the localStorage
+        function addTodo(toAdd) {
+            todoData.update(td => { td.push(toAdd) });
+            todoText = "";
+            localStorage.setItem('todos', JSON.stringify(todoData.get()));
+        }
+
+        // Render statefully the todos element
+        todos.stateful([ todoData ], ([ todoData ]) => todoData.map(todo => `<li>${todo}</li>`).join(''));
+
+        // Load existing TODOs at the start of the app
+        (JSON.parse(localStorage.getItem('todos')) || []).forEach(todo => {
+            addTodo(todo);
+        });
+    </script>
+</body>
+</html>
