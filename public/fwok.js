@@ -8,6 +8,7 @@ function fwok(qs, _el=undefined) {
             else el.innerHTML = rend.toString();
         }
         depends.forEach(x => x._onchange.push(onchanged));
+        onchanged();
     };
     el.on = (event, callback, preventDefault=false) => {
         if (preventDefault) {
