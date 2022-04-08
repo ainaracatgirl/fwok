@@ -4,8 +4,10 @@ function fwok(qs, _el=undefined) {
         function onchanged() {
             const args = depends.map(x => x.get());
             const rend = render(args);
-            if (Array.isArray(rend)) el.innerHTML = rend.join('');
-            else el.innerHTML = rend.toString();
+            let rendTxt = "";
+            if (Array.isArray(rend)) rendTxt = rend.join('');
+            else rendTxt = rend.toString();
+            el.innerHTML = rendTxt.replace('fwok:onclick={', 'onclick={this.getRootNode().');
         }
         depends.forEach(x => x._onchange.push(onchanged));
         onchanged();
